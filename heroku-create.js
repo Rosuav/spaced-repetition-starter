@@ -13,23 +13,25 @@ function run(args, options={}) {
 	});
 }
 
-(async function() {
-	if (!secret.CLIENT_ID || !secret.CLIENT_SECRET) {
-		console.error("Please create server/secret.js before using this script.");
-		return;
-	}
-	let proc = await run(["git", "remote"]);
+if (!secret.CLIENT_ID || !secret.CLIENT_SECRET) {
+	console.error("Please create server/secret.js before using this script.");
+	process.exit(1);
+}
+run(["git", "remote"]).then(proc => {
 	if (proc.out.split("\n").includes("heroku")) {
 		console.log("Found existing heroku remote - reapplying credentials.");
+		return run(["true"]); //Shim because it's a pain to do conditional promises.
 	} else {
-		proc = await run(["heroku", "create"]);
-		console.log(proc.out);
-		if (proc.err != "") console.log(proc.err);
+		return run(["heroku", "create"]);
 	}
-	proc = await run(["heroku", "config:set",
+}).then(proc => {
+	console.log(proc.out);
+	if (proc.err != "") console.log(proc.err);
+	return run(["heroku", "config:set",
 		"CLIENT_ID=" + secret.CLIENT_ID,
 		"CLIENT_SECRET=" + secret.CLIENT_SECRET,
 	]);
+}).then(proc => {
 	console.log(proc.out);
 	if (proc.err != "") console.log(proc.err);
-})().catch(console.error);
+}).catch(console.error);
