@@ -66,16 +66,8 @@ This file is in ignored by git because it is in your `.gitignore`. Never commit 
 ## Deployment to Heroku
 
 ```sh
-$ heroku create
+$ node heroku-create.js
 ```
-
-Configure your Google client id and secret on Heroku:
-
-```sh
-$ heroku config:set CLIENT_ID=yourId123.apps.googleusercontent.com CLIENT_SECRET=yoursecret
-```
-
-(You can also do this on dashboard.heroku.com under your app's settings.)
 
 ### To deploy:
 
