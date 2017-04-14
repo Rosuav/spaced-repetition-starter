@@ -27,6 +27,10 @@ run(["git", "remote"]).then(proc => {
 }).then(proc => {
 	console.log(proc.out);
 	if (proc.err != "") console.log(proc.err);
+
+	//This is the most important part. It's equivalent to running:
+	//heroku config:set CLIENT_ID=yourId123.apps.googleusercontent.com CLIENT_SECRET=yoursecret
+	//but with the actual ID and secret taken from the gitignored file in the server directory.
 	return run(["heroku", "config:set",
 		"CLIENT_ID=" + secret.CLIENT_ID,
 		"CLIENT_SECRET=" + secret.CLIENT_SECRET,
