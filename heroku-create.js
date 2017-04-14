@@ -20,8 +20,7 @@ function run(args, options={}) {
 	}
 	let proc = await run(["git", "remote"]);
 	if (proc.out.split("\n").includes("heroku")) {
-		console.error("Found existing heroku remote - reapplying credentials.");
-		return;
+		console.log("Found existing heroku remote - reapplying credentials.");
 	} else {
 		proc = await run(["heroku", "create"]);
 		console.log(proc.out);
